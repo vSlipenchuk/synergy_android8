@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 'android-P'
-    buildToolsVersion "28.0.0-rc1"
+    compileSdkVersion 26  //'android-P'
+    //buildToolsVersion "28.0.0-rc1"
 
     defaultConfig {
         applicationId "org.synergy"
@@ -28,7 +28,9 @@ android {
     }
 }
 repositories {
+    google()
     mavenCentral()
+
 }
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

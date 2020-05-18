@@ -91,7 +91,7 @@ public class Client implements EventTarget {
 			serverAddress.resolve ();
 			
 			if (serverAddress.getAddress () != null) {
-				Log.debug ("Connecting to: '" +
+				Log.debug ("Connecting to ->> : '" +
 						serverAddress.getHostname () + "': " +
 						serverAddress.getAddress () + ":" +
 						serverAddress.getPort ());
@@ -119,7 +119,7 @@ public class Client implements EventTarget {
             //toast.show();
 		} catch (IOException e) {
 			final String errorMessage = "Failed to connect to " + serverAddress.getHostname()
-					+ ":" + serverAddress.getPort();
+					+ ":" + serverAddress.getPort() +e.toString();
 			Log.error(errorMessage);
 			//final Toast toast = Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT);
 			//toast.show();
@@ -184,6 +184,7 @@ public class Client implements EventTarget {
     
     private void handleDisconnected () {
     	// TODO
+        Log.info("== handleDisconnected == ");
     }
 
     private void handleHello () {
@@ -355,7 +356,9 @@ public class Client implements EventTarget {
     }
     
     public void mouseWheel (int x, int y) {
-    	screen.mouseWheel(x, y);
+    	  if (x>1) x=1; 	  if (x<-1) x=-1;
+    	  if (y>1) y=1;   if (y<-1) y=-1;
+          screen.mouseWheel(x, y);
     }
     
     /**

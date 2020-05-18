@@ -50,6 +50,10 @@ int suinput_close(int uinput_fd);
 */
 int inline suinput_move_pointer (const int uinput_fd, const int32_t x, const int32_t y);
 
+// Same - for absulute coordinates
+int inline suinput_set_pointer (const int uinput_fd, const int32_t x, const int32_t y);
+int inline suinput_sync (const int uinput_fd);
+
 /*
   Sends a press event to the event device. Event is repeated after
   a short delay until a release event is sent. Returns 0 on success.

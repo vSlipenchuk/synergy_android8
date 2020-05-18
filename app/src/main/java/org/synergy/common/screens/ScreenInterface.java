@@ -50,7 +50,7 @@ public interface ScreenInterface {
 
 	public void mouseMove (int x, int y);
 
-	public void mouseRelativeMove (int x, int y);
+	public int mouseRelativeMove (int x, int y);
 
 	public void mouseWheel (int x, int y);
 

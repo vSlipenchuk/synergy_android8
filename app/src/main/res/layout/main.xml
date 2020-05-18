@@ -11,7 +11,7 @@
     <EditText android:layout_width="fill_parent" 
               android:layout_height="wrap_content" 
               android:background="@android:drawable/editbox_background"
-              android:text="android"
+              android:text="slave"
               android:layout_below="@id/clientNameTextView"
               android:id="@+id/clientNameEditText"/>
 	
@@ -24,7 +24,7 @@
     <EditText android:layout_width="fill_parent" 
               android:layout_height="wrap_content" 
               android:background="@android:drawable/editbox_background"
-              android:text="igsarmewmactck"
+              android:text="192.168.42.189"
               android:layout_below="@id/serverHostTextView"
               android:id="@+id/serverHostEditText"/>
 

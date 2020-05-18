@@ -17,7 +17,8 @@ public final class Injection {
 	public static native void stop ();
 	public static native void keydown (int key, int mask);
 	public static native void keyup (int key, int mask);
-	public static final native void movemouse (final int x, final int y);
+	public static final native int movemouse (final int x, final int y);
+	public static final native void setmouse (final int x, final int y);
 	public static native void mousedown (int buttonId);
 	public static native void mouseup (int buttonId);
 	public static native void mousewheel (int x, int y);

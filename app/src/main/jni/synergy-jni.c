@@ -228,6 +228,10 @@ void Java_org_synergy_injection_Injection_movemouse (JNIEnv *env, jobject thiz, 
     suinput_move_pointer (uinput_fd, x, y);
 }
 
+void Java_org_synergy_injection_Injection_setmouse (JNIEnv *env, jobject thiz, const jint x, const jint y) {
+    suinput_set_pointer (uinput_fd, x, y);
+}
+
 void Java_org_synergy_injection_Injection_mousedown (JNIEnv *env, jobject thiz, jint buttonId) {
     suinput_press (uinput_fd, BTN_LEFT);
 }

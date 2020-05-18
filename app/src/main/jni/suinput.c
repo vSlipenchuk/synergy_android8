@@ -31,6 +31,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define DEBUG_TAG "Synergy"
 
+int uinput_abs = 0;
+
 char* UINPUT_FILEPATHS[] = {
   "/android/dev/uinput",
   "/dev/uinput",     // crw-rw----    1 system   bluetoot   10, 223 Oct 28 22:04 uinput
@@ -52,6 +54,12 @@ static inline int suinput_write(int uinput_fd,
     return -1;
   return 0;
 }
+
+inline int suinput_sync(int uinput_fd)
+{
+      return suinput_write(uinput_fd, EV_SYN, SYN_REPORT, 0);
+}
+
 
 static inline int suinput_write_syn(int uinput_fd, uint16_t type, uint16_t code, int32_t value)
 {
@@ -89,11 +97,12 @@ int suinput_open(const char* device_name, const struct input_id* id)
     goto err;
   }
 
-  /* Relative pointer motions */
-  if (ioctl(uinput_fd, UI_SET_EVBIT, EV_REL) == -1) {
-    goto err;
-  }
-  
+    /* Relative pointer motions */
+    if (ioctl(uinput_fd, UI_SET_EVBIT, EV_REL) == -1)    goto err;
+
+      /* Absolute pointer motions */
+    if (ioctl(uinput_fd, UI_SET_EVBIT, EV_ABS) == -1)       goto err;
+
   /* Synchronization events, this is probably set implicitely too. */
   if (ioctl(uinput_fd, UI_SET_EVBIT, EV_SYN) == -1) {
     goto err;
@@ -108,12 +117,16 @@ int suinput_open(const char* device_name, const struct input_id* id)
       goto err;
      }
   }
-  
-  for (i=REL_X;i<REL_MAX;i++) {
-      if (ioctl(uinput_fd,UI_SET_RELBIT,i) < 0) {
-         goto err;
+
+    if (ioctl(uinput_fd, UI_SET_ABSBIT, ABS_X) < 0) goto err;
+    if (ioctl(uinput_fd, UI_SET_ABSBIT, ABS_Y) < 0) goto err;
+
+
+    for (i = REL_X; i < REL_MAX; i++) {
+      if (ioctl(uinput_fd, UI_SET_RELBIT, i) < 0) {
+        goto err;
       }
-  }
+    }
 
   /* Set device-specific information. */
   memset(&user_dev, 0, sizeof(user_dev));
@@ -181,9 +194,16 @@ int suinput_close(int uinput_fd)
 }
 
 int suinput_move_pointer (const int uinput_fd, const int32_t x, const int32_t y) {
-  if ( suinput_write(uinput_fd, EV_REL, REL_X, x) )
-  	return -1;
+  if  ( suinput_write(uinput_fd, EV_REL, REL_X, x) ) 	 return -1;
   return suinput_write_syn(uinput_fd, EV_REL, REL_Y, y);
+}
+
+int suinput_set_pointer (const int uinput_fd, const int32_t x, const int32_t y) {
+    suinput_write(uinput_fd, EV_REL, REL_X,  -5000);
+    suinput_write_syn(uinput_fd, EV_REL, REL_Y, -5000);
+    suinput_write(uinput_fd, EV_REL, REL_X,  x);
+    suinput_write_syn(uinput_fd, EV_REL, REL_Y, y);
+    return 0;
 }
 
 int suinput_move_wheel (const int uinput_fd, const int32_t x, const int32_t y) {

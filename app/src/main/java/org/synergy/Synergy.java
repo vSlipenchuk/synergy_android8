@@ -141,7 +141,7 @@ public class Synergy extends Activity {
         	
         	//PlatformIndependentScreen screen = new PlatformIndependentScreen(basicScreen);
             
-            Log.debug ("Hostname: " + clientName);
+            Log.info ("Try connect hostname: " + serverAddress);
             
 			Client client = new Client (getApplicationContext(), clientName, serverAddress, socketFactory, null, basicScreen);
 			new SynergyConnectTask().execute(client);
@@ -153,7 +153,9 @@ public class Synergy extends Activity {
 			
         } catch (Exception e) {
         	e.printStackTrace();
-        	((EditText) findViewById (R.id.outputEditText)).setText("Connection Failed.");
+        	Log.info("now error - never see it - connect async!");
+        	Log.info("Failed with:"+e.toString());
+        	((EditText) findViewById (R.id.outputEditText)).setText("Connection Failed: "+e.toString());
         }
     }
 }

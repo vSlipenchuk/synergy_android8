@@ -23,6 +23,7 @@ import java.util.Arrays;
 
 import org.synergy.base.Log;
 import org.synergy.injection.Injection;
+import org.synergy.io.msgs.MouseRelMoveMessage;
 
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -39,6 +40,9 @@ public class BasicScreen implements ScreenInterface {
 	// Screen dimensions
 	private int width;
 	private int height;
+
+	// corrector
+	private int cnt;
 	
     public BasicScreen () {
     	
@@ -135,6 +139,9 @@ public class BasicScreen implements ScreenInterface {
 	@Override
 	public final void mouseMove (int x, int y) {
 		Log.debug2 ("mouseMove: " + x + ", " + y);
+//		mouseRelativeMove(x,y);		return;
+		// zu
+
 
 		// this state appears to signal a screen exit, use this to
 		// flag mouse position reinitialization for next call
@@ -145,24 +152,41 @@ public class BasicScreen implements ScreenInterface {
         }
         
         if (mouseX < 0 || mouseY < 0) {
-        	Injection.movemouse (-width, -height);
-        	Injection.movemouse(x, y);
+        	mouseRelativeMove(-width,-height);
+        	mouseRelativeMove(x,y);
+        	//Injection.movemouse (-width, -height);
+        	//Injection.movemouse(x, y);
         	mouseX = x;
         	mouseY = y;
         } else {
 	        int dx = x - mouseX;
-	    	int dy = y - mouseY; 
-		  	Injection.movemouse (dx, dy);
-	    	// Adjust 'known' cursor position
-	        mouseX += dx;
-	        mouseY += dy;
+	    	int dy = y - mouseY;
+	    	if (mouseRelativeMove(dx,dy)==0) {
+				//Injection.movemouse (dx, dy);
+				// Adjust 'known' cursor position
+				mouseX += dx;
+				mouseY += dy;
+			}
         }
+
 	}
 	
 	@Override
-	public void mouseRelativeMove (int x, int y) {
-		Injection.movemouse (x, y);
-	}
+	public int mouseRelativeMove (int x, int y) {
+    	//cnt++;
+    	//if (cnt<1) Injection.movemouse(x,y);
+		  //  else   { Injection.setmouse(mouseX+x,mouseY+y); cnt=0; }
+    //	Injection.movemouse(-width,-height);
+    //	Injection.movemouse(mouseX+x,mouseY+y);
+
+		//return Injection.movemouse (x, y);
+	//	return 0;
+//mouseX+=x; if (mouseX<0) mouseX=0; if (mouseX>width-1)  mouseX=width-1;
+//mouseY+=y; if (mouseY<0) mouseY=0; if (mouseY>height-1) mouseY=height-1;
+
+			Injection.setmouse(mouseX+x,mouseY+y);
+return 0;
+    }
 
 	@Override
 	public void mouseWheel (int x, int y) {
@@ -170,12 +194,16 @@ public class BasicScreen implements ScreenInterface {
 	}
 	
 	private void clearMousePosition(boolean inject) {
-		mouseX = -1; 
-	    mouseY = -1;
+
+		mouseX = -1;   mouseY = -1;
+		//mouseX = 0; mouseY=0;
 	    if (inject) {
 	    	// moving to height/width will hide mouse pointer
-	    	Injection.movemouse(width, height);
+	    	//Injection.movemouse(width, height);
+			mouseRelativeMove(width,height);
+
 	    }
+
 	}
 
 	@Override

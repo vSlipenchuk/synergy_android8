@@ -95,8 +95,10 @@ public class TCPSocket implements DataSocketInterface {
 
         // Turn off Nagle's algorithm and set traffic type (RFC 1349) to minimize delay
         // to avoid mouse pointer "lagging"
-        socket.setTcpNoDelay(true);
-        socket.setTrafficClass(8);
+
+        // zuzuka -removed
+        //socket.setTcpNoDelay(true);
+        //socket.setTrafficClass(8);
         
         sendEvent (EventType.SOCKET_CONNECTED);
         onConnected ();
